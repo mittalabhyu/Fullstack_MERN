@@ -60,7 +60,7 @@ border-bottom: 1px solid gray;
 .formcard{
   background-color: #fff;
   width: 60%;
-  height: 60%;
+  height: 50%;
   border-radius: 12px;
   box-shadow: 4px 4px 24px 0px black;
   padding: 12px;
@@ -76,10 +76,28 @@ border-bottom: 1px solid gray;
 .formcard input{
   margin-top: 8px;
   width: 100%;
-  height: 24px;
+  height: 30px;
+  border-radius: 12px;
+  border: 1px solid black;
+  padding-left: 8px;
 
 }
 
+
 .formcard label{
-  
+  margin-bottom: 4px;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.formcard button{
+  height: 36px;
+  border-radius: 12px;
+  border: none;
+  background-color: black;
+  color: #fff;
+  font-weight: bold;
+}
+.formcard button:hover{
+  background-color: gray;
 }
