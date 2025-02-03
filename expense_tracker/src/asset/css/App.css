@@ -63,12 +63,10 @@ border-bottom: 1px solid gray;
 .formcard{
   background-color: #fff;
   width: 60%;
-  height: 50%;
+  max-height: 500px;
   border-radius: 12px;
   box-shadow: 4px 4px 24px 0px black;
   padding: 12px;
-
-
  
 }
 .formcard div{

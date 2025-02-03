@@ -1,13 +1,15 @@
-import React from 'react'
+import React,{useState} from 'react'
 import img1 from '../asset/img/dashboard.png'
 import { Link, useNavigate } from 'react-router-dom'
 function Homepage() {
 
     const navigate =useNavigate();
-  
+    const [email, setEmail] = useState();
+    const [pass, setPass] = useState();
     const doLogin = ()=>{
-        console.log("Clicked");
-        navigate("/dashboard");
+        console.log("Clicked",email,pass);
+        // navigate("/dashboard");
+
 
     }
     return (
@@ -32,6 +34,8 @@ function Homepage() {
                         required
                         type="email"
                         placeholder='Enter your email'
+                        value={email}
+                        onChange={e =>setEmail(e.value)}
 
                     />
                 </div>
@@ -43,6 +47,8 @@ function Homepage() {
                         required
                         type="password"
                         placeholder='Enter your Password'
+                        value={pass}
+                        onChange={e=>setPass(e.value)}
 
                     />
                 </div>
