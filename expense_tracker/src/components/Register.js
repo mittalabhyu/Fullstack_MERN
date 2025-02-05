@@ -2,20 +2,25 @@ import React, { useEffect, useState } from 'react'
 import '../asset/css/Register.css'
 import { Link, useNavigate } from 'react-router-dom'
 function Register() {
-    useEffect(()=>{
-        console.log("Hi")
-
-    },[])
-
-
-const [name, setName] = useState();
+     const [inputs, setInputs] = useState({})
+     const navigate = useNavigate();
+        const handleChange = (event) => {
+            const name = event.target.name;
+            const value = event.target.value;
+            setInputs(values => ({ ...values, [name]: value }))
+        }
+        const doRegister = (event) => {
+            event.preventDefault();
+            console.log("Clicked", inputs);
+            navigate("/dashboard");
+        }
     return (
         <div className='mainContainer'>
             <div className='formcard'>
                 <div>
                     <h2 style={{ alignSelf: 'center' }}>Register</h2>
                 </div>
-                <form>
+                <form onSubmit={doRegister}>
                     <div>
                         <label>
                             Name
@@ -24,6 +29,9 @@ const [name, setName] = useState();
                             required
                             type="text"
                             placeholder='Enter your name'
+                            value={inputs.name || ''}
+                            onChange={handleChange}
+                            name='name'
 
                         />
                     </div>
@@ -35,6 +43,9 @@ const [name, setName] = useState();
                             required
                             type="email"
                             placeholder='Enter your email'
+                            value={inputs.email || ''}
+                            onChange={handleChange}
+                            name='email'
 
                         />
                     </div>
@@ -46,6 +57,9 @@ const [name, setName] = useState();
                             required
                             type="password"
                             placeholder='Enter your password'
+                            value={inputs.pass || ''}
+                            onChange={handleChange}
+                            name='pass'
 
                         />
                     </div>
@@ -57,6 +71,9 @@ const [name, setName] = useState();
                             required
                             type="password"
                             placeholder='Confirm your password'
+                            value={inputs.cnfpass || ''}
+                            onChange={handleChange}
+                            name='cnfpass'
 
                         />
                     </div>
