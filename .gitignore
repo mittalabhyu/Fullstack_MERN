@@ -2,7 +2,7 @@
 
 #backend
 /backend/node_modules
-/backend/.env.MONGO_URL
+/backend/.env
 # dependencies
 expense_tracker/node_modules
 expense_tracker/.pnp
