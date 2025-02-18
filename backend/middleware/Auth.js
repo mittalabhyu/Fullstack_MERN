@@ -1,8 +1,11 @@
 const jwt = require('jsonwebtoken');
+
+
+
 const checkToken = (req, res, next) => {
     const token = req.headers['token'];
     if (!token) {
-        return res.status(403)
+        return res.status(404)
             .json({ message: 'JWT token is required' });
     }
     try {
@@ -14,5 +17,7 @@ const checkToken = (req, res, next) => {
             .json({ message: 'JWT token is wrong or expired' });
     }
 }
+
+
 
 module.exports = checkToken;

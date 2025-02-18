@@ -13,7 +13,11 @@ const modify = (req, res) => {
     res.send("Modify")
 }
 
+const reset = (req, res) => {
+  
+}
+
 module.exports = {
-    find, insert, del, modify
+    find, insert, del, modify, reset
 
 }
