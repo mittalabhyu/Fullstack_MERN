@@ -10,9 +10,10 @@ const checkToken = (req, res, next) => {
     }
     try {
         const verify = jwt.verify(token, process.env.JWT_KEY);
-        req.user = verify;
+        console.log("JWT ",token,verify);
         next();
     } catch (err) {
+        console.log(err);
         return res.status(403)
             .json({ message: 'JWT token is wrong or expired' });
     }
