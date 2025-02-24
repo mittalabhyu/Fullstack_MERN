@@ -128,6 +128,7 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log("Check ",email,password);
         const user = await UserModel.findOne({ email });
         console.log("User ", user);
         if (!user) {

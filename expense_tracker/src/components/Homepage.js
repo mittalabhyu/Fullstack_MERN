@@ -8,6 +8,11 @@ function Homepage() {
     const [inputs1, setInputs1] = useState({})
     const [inputs2, setInputs2] = useState({})
     const [showerror, setShowError] = useState(false)
+
+   
+
+
+
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -53,16 +58,30 @@ function Homepage() {
     }
 
 
-    const doLogin = (event) => {
+    const doLogin = async(event) => {
         event.preventDefault();
         console.log("Clicked", inputs);
+        var paramsjson = {
+            email:inputs.email,
+            password:inputs.pass
+        }
+        var params = JSON.stringify(paramsjson);
+        await fetch("http://localhost:5000/auth/login",
+            {
+                method:"POST",
+                headers: {
+                    "Content-Type": "application/json",
+                  },
+                body:params
+                
+            }
+        ).then((res)=>{(res.json()).then((data)=>{
+            console.log("Data ",data);
+        }
+    )
 
-        if (inputs.pass.length >= 8) {
-            navigate("/dashboard");
-        }
-        else {
-            setShowError(true);
-        }
+        })
+        
     }
     const updatePass = (event)=>{
         event.preventDefault();
@@ -114,6 +133,20 @@ function Homepage() {
                     <h2 style={{ alignSelf: 'center' }}>Update Password</h2>
                 </div>
                 <form onSubmit={updatePass}>
+                <div>
+                        <label>
+                            OTP
+                        </label>
+                        <input
+                            required
+                            type="number"
+                            placeholder='Enter your OTP'
+                            value={inputs2.otp || ''}
+                            onChange={handleChange2}
+                            name='otp'
+
+                        />
+                    </div>
                     <div>
                         <label>
                             New Password
@@ -187,7 +220,7 @@ function Homepage() {
                         {
                             showerror ?
                                 <div>
-                                    <span style={{ color: 'red', alignSelf: 'center' }}>Password length must be greater then 8</span>
+                                    <span style={{ color: 'red', alignSelf: 'center' }}>Invalid Credentials</span>
                                 </div> : null
                         }
 
