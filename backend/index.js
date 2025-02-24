@@ -18,6 +18,9 @@ app.use('/record',RecordRouter );
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
+app.get('/test', (req, res) => {
+  res.send('Hello World!')
+})
 
 app.listen(PORT, () => {
   console.log(`Server Running on port ${PORT}`)
