@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import img1 from '../asset/img/dashboard.png'
 import { Link, useNavigate } from 'react-router-dom'
+import api from '../api/api.json'
 function Homepage() {
 
     const navigate = useNavigate();
@@ -9,7 +10,7 @@ function Homepage() {
     const [inputs2, setInputs2] = useState({})
     const [showerror, setShowError] = useState(false)
 
-   
+
 
 
 
@@ -29,19 +30,19 @@ function Homepage() {
         setInputs2(values => ({ ...values, [name]: value }))
     }
     const openModal3 = () => {
-     
+
         var modal2 = document.getElementById("forgetModal");
         console.log("CC")
         modal2.style.display = "block";
     }
     const closeModal3 = (event) => {
- 
-   
+
+
         var modal2 = document.getElementById("forgetModal");
         modal2.style.display = "none";
     }
     const openModal4 = () => {
-     
+
         var modal4 = document.getElementById("forgetModal1");
         console.log("CC")
         modal4.style.display = "block";
@@ -58,32 +59,42 @@ function Homepage() {
     }
 
 
-    const doLogin = async(event) => {
+    const doLogin = async (event) => {
         event.preventDefault();
         console.log("Clicked", inputs);
         var paramsjson = {
-            email:inputs.email,
-            password:inputs.pass
+            email: inputs.email,
+            password: inputs.pass
         }
         var params = JSON.stringify(paramsjson);
-        await fetch("http://localhost:5000/auth/login",
+        await fetch(api.baseurl + "auth/login",
             {
-                method:"POST",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                  },
-                body:params
-                
+                },
+                body: params
+
             }
-        ).then((res)=>{(res.json()).then((data)=>{
-            console.log("Data ",data);
-        }
-    )
+        ).then((res) => {
+            (res.json()).then((data) => {
+                if(data.success == true){
+                    localStorage.setItem("name",data.name);
+                    localStorage.setItem("email",data.email);
+                    localStorage.setItem("token",data.token);
+                    localStorage.setItem("islogin",true);
+                    navigate('/dashboard');
+                }
+                else{
+                    setShowError(true);
+                }
+            }
+            )
 
         })
-        
+
     }
-    const updatePass = (event)=>{
+    const updatePass = (event) => {
         event.preventDefault();
         closeModal4();
     }
@@ -97,93 +108,93 @@ function Homepage() {
             </div>
             <div className='rightcontainer'>
                 <div id="forgetModal" className="modal3">
-                <div className='formcard'>
-                                <div>
-                                    <h2 style={{ alignSelf: 'center' }}>Forgot Password ?</h2>
-                                </div>
-                                <form onSubmit={forgetEmail}>
-                                    <div>
-                                        <label>
-                                            Email
-                                        </label>
-                                        <input
-                                            required
-                                            type="email"
-                                            placeholder='Enter your Email ID'
-                                            value={inputs1.fmail || ''}
-                                            onChange={handleChange1}
-                                            name='fmail'
+                    <div className='formcard'>
+                        <div>
+                            <h2 style={{ alignSelf: 'center' }}>Forgot Password ?</h2>
+                        </div>
+                        <form onSubmit={forgetEmail}>
+                            <div>
+                                <label>
+                                    Email
+                                </label>
+                                <input
+                                    required
+                                    type="email"
+                                    placeholder='Enter your Email ID'
+                                    value={inputs1.fmail || ''}
+                                    onChange={handleChange1}
+                                    name='fmail'
 
-                                        />
-                                    </div>
-                                    
-                                    <div>
-                                        <button>Submit</button>
-                                    </div>
-                                    <div>
-                                        <button onClick={closeModal3}>Cancel</button>
-                                    </div>
-
-                                </form>
+                                />
                             </div>
+
+                            <div>
+                                <button>Submit</button>
+                            </div>
+                            <div>
+                                <button onClick={closeModal3}>Cancel</button>
+                            </div>
+
+                        </form>
+                    </div>
                 </div>
                 <div id="forgetModal1" className="modal4">
-       <div className='formcard'>
-                <div>
-                    <h2 style={{ alignSelf: 'center' }}>Update Password</h2>
+                    <div className='formcard'>
+                        <div>
+                            <h2 style={{ alignSelf: 'center' }}>Update Password</h2>
+                        </div>
+                        <form onSubmit={updatePass}>
+                            <div>
+                                <label>
+                                    OTP
+                                </label>
+                                <input
+                                    required
+                                    type="number"
+                                    placeholder='Enter your OTP'
+                                    value={inputs2.otp || ''}
+                                    onChange={handleChange2}
+                                    name='otp'
+
+                                />
+                            </div>
+                            <div>
+                                <label>
+                                    New Password
+                                </label>
+                                <input
+                                    required
+                                    type="password"
+                                    placeholder='Enter your new password'
+                                    value={inputs2.fnpsw || ''}
+                                    onChange={handleChange2}
+                                    name='fnpsw'
+
+                                />
+                            </div>
+                            <div>
+                                <label>
+                                    Confirm New Password
+                                </label>
+                                <input
+                                    required
+                                    type="password"
+                                    placeholder='Confirm your new password'
+                                    value={inputs2.fcnfpsw || ''}
+                                    onChange={handleChange2}
+                                    name='fcnfpsw'
+
+                                />
+                            </div>
+                            <div>
+                                <button>Submit</button>
+                            </div>
+                            <div>
+                                <button onClick={closeModal4}>Cancel</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <form onSubmit={updatePass}>
-                <div>
-                        <label>
-                            OTP
-                        </label>
-                        <input
-                            required
-                            type="number"
-                            placeholder='Enter your OTP'
-                            value={inputs2.otp || ''}
-                            onChange={handleChange2}
-                            name='otp'
-
-                        />
-                    </div>
-                    <div>
-                        <label>
-                            New Password
-                        </label>
-                        <input
-                            required
-                            type="password"
-                            placeholder='Enter your new password'
-                            value={inputs2.fnpsw || ''}
-                            onChange={handleChange2}
-                            name='fnpsw'
-
-                        />
-                    </div>
-                    <div>
-                        <label>
-                            Confirm New Password
-                        </label>
-                        <input
-                            required
-                            type="password"
-                            placeholder='Confirm your new password'
-                            value={inputs2.fcnfpsw || ''}
-                            onChange={handleChange2}
-                            name='fcnfpsw'
-
-                        />
-                    </div>
-                    <div>
-                        <button>Submit</button>
-                    </div>
-                    <div>
-                        <button onClick={closeModal4}>Cancel</button>
-                    </div>
-                </form>
-            </div>
-                    </div>
                 <div className='formcard'>
                     <div>
                         <h2 style={{ alignSelf: 'center' }}>Login</h2>

@@ -3,6 +3,7 @@ import img1 from '../asset/img/cart.jpg'
 import del from '../asset/img/delete.svg'
 import edit from '../asset/img/edit.png'
 import { Link, useNavigate } from 'react-router-dom'
+import api from '../api/api.json'
 function Dashboard() {
     const navigate = useNavigate();
     const [inputs, setInputs] = useState({})
@@ -15,7 +16,18 @@ function Dashboard() {
 
     const myExpenses = [100, 200, 300, 600, 700, 800];
     useEffect(() => {
+         fetch(api.baseurl + "record/get?email="+localStorage.getItem("email"),
+            {
+                headers: {
+                    "token": localStorage.getItem("token"),
+                },
+            }
+         ).then((res)=>
+            res.json().then((data)=>{
+                console.log("Data ",data);
 
+            })
+        )
     },[showdata])
    
   
