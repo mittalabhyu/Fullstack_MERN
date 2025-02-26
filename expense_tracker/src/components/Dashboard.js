@@ -9,7 +9,7 @@ function Dashboard() {
     const [inputs, setInputs] = useState({})
     const [inputs1, setInputs1] = useState({})
     const [showdata, setShowData] = useState(false)
-    const [myExpenses,setMyExpenses] = useState({})
+    const [myExpenses,setMyExpenses] = useState(null)
     const [showerror, setShowError] = useState(false)
     const [error, setError] = useState("")
     const [id, setID] = useState("")
@@ -28,14 +28,17 @@ function Dashboard() {
                 )
                 const data = await res.json()
                 console.log("Data ", data);
-                console.log(data.expenses[0].amount)
+               
                 if(data.count>0){
                     setShowData(true);
-                    setMyExpenses(data.expenses);
+                    setMyExpenses(await(data.expenses));
                     console.log("EXPENSE ",myExpenses)
                     var sum = await data.expenses.reduce((a,v) =>  a = a + v.amount , 0 )
                     console.log("SUM",sum)
                     setTotal(sum);
+                }
+                else{
+                    setShowData(false);
                 }
             }
             catch (error) {
@@ -291,7 +294,7 @@ function Dashboard() {
 
                     </div>
                     <div style={{ backgroundColor: 'lightgray', width: '100%', overflowY: 'scroll', marginBottom: '50px', justifyContent: 'center', justifyItems: 'center', padding: '20px' }}>
-                        {myExpenses.map((val) =>
+                        {myExpenses && myExpenses.map((val) =>
                             <div className='expenseCard' key={val._id}>
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', justifyItems: 'center', alignContent: 'center', alignItems: 'center' }}>
                                     <img onClick={()=>{openModal2(val._id,val.title,val.amount,val.date,val.type)}} style={{ width: '30px', height: '30px' }} src={edit} />
