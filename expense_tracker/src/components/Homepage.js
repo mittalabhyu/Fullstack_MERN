@@ -10,6 +10,7 @@ function Homepage() {
     const [inputs2, setInputs2] = useState({})
     const [showerror, setShowError] = useState(false)
     const [error, setError] = useState("")
+    const [otp, setOTP] = useState("")
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -48,11 +49,45 @@ function Homepage() {
         var modal4 = document.getElementById("forgetModal1");
         modal4.style.display = "none";
     }
-    const forgetEmail = (event) => {
+    const forgetEmail = async (event) => {
         event.preventDefault();
-        console.log("Clicked", inputs);
-        closeModal3();
-        openModal4();
+        console.log("Clicked", inputs1);
+        var paramsjson = {
+            email: inputs1.fmail,
+        }
+        var params = JSON.stringify(paramsjson);
+        try {
+            const res = await fetch(api.baseurl + "auth/email",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: params
+
+                }
+            )
+            const data = await res.json();
+            if (data.success == true) {
+                setOTP(data.otp);
+                closeModal3();
+                openModal4();
+            }
+            else {
+                closeModal3();
+                setError("Unable to send Email")
+                setShowError(true);
+            }
+
+        }
+        catch (error) {
+            console.log("Error ", error);
+            closeModal3();
+            setShowError(true);
+            setError("Failed to connect with server");
+        }
+
+
     }
 
 
@@ -76,8 +111,6 @@ function Homepage() {
                 }
             )
             const data = await res.json()
-
-
             if (data.success == true) {
                 localStorage.setItem("name", data.name);
                 localStorage.setItem("email", data.email);
@@ -89,8 +122,6 @@ function Homepage() {
                 setShowError(true);
                 setError("Invalid Credentials")
             }
-
-
         }
         catch (error) {
             console.log("Error ", error);
@@ -98,8 +129,50 @@ function Homepage() {
             setError("Failed to connect with server");
         }
     }
-    const updatePass = (event) => {
+    const updatePass = async(event) => {
         event.preventDefault();
+        if(inputs2.otp == otp){
+            var paramsjson = {
+                password:inputs2.fnpsw,
+                email: inputs1.fmail,
+            }
+            var params = JSON.stringify(paramsjson);
+            try {
+                const res = await fetch(api.baseurl + "auth/forget",
+                    {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: params
+    
+                    }
+                )
+                const data = await res.json();
+                if (data.success == true) {
+                    setError("Password Updated Successfully")
+                    setShowError(true);
+                   
+                    
+                }
+                else {
+                  
+                    setError("Unable to update password")
+                    setShowError(true);
+                }
+    
+            }
+            catch (error) {
+                console.log("Error ", error);
+                setShowError(true);
+                setError("Failed to connect with server");
+            }
+
+        }
+        else{
+            setShowError(true);
+            setError("OTP Invalid");
+        }
         closeModal4();
     }
     return (
