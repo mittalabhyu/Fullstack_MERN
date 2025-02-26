@@ -22,32 +22,34 @@ function Register() {
                 password: inputs.pass
             }
             var params = JSON.stringify(paramsjson);
-            await fetch(api.baseurl + "auth/signup",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: params
-
-                }
-            ).then((res) => {
-                (res.json()).then((data) => {
-                    if (data.success == true) {
-                        setError("Account Created Successfully. Please Login")
-                        setInputs({})
-                        setShowError(true);
-
-
+            try{
+                const res = await fetch(api.baseurl + "auth/signup",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: params
+    
                     }
-                    else {
-                        setError("User already exist or network issue")
-                        setShowError(true);
-                    }
-                }
                 )
+                const data = await res.json();
+                if (data.success == true) {
+                    setError("Account Created Successfully. Please Login")
+                    setInputs({})
+                    setShowError(true);
+                }
+                else {
+                    setError("User already exist or network issue")
+                    setShowError(true);
+                }
 
-            })
+            }
+            catch (error) {
+                console.log("Error ", error);
+                setShowError(true);
+                setError("Failed to connect with server");
+            }
         }
         else{
             setError("Password and confirm password do not match")

@@ -7,38 +7,46 @@ import api from '../api/api.json'
 function Dashboard() {
     const navigate = useNavigate();
     const [inputs, setInputs] = useState({})
+    const [inputs1, setInputs1] = useState({})
     const [showdata, setShowData] = useState(false)
+    const myExpenses = [100, 200, 300, 600, 700, 800];
+
+    useEffect(() => {
+        (async () => {
+            try{
+        const res = await fetch(api.baseurl + "record/get?email="+localStorage.getItem("email"),
+           {
+               headers: {
+                   "token": localStorage.getItem("token"),
+               },
+           }
+        )
+        const data = await res.json()
+        console.log("Data ",data); 
+    }
+    catch (error) {
+        console.log("Error ", error);
+    }
+    })();
+   },[showdata])
+
+
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({ ...values, [name]: value }))
     }
-
-    const myExpenses = [100, 200, 300, 600, 700, 800];
-    useEffect(() => {
-         fetch(api.baseurl + "record/get?email="+localStorage.getItem("email"),
-            {
-                headers: {
-                    "token": localStorage.getItem("token"),
-                },
-            }
-         ).then((res)=>
-            res.json().then((data)=>{
-                console.log("Data ",data);
-
-            })
-        )
-    },[showdata])
-   
-  
-
-    const deleteExpense = () => {
-        closeModal1()
+    const handleChange1 = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setInputs(values => ({ ...values, [name]: value }))
     }
-    const openModal1 = () => {
+     
+
+    const openModal1 = (val) => {
       
         var modal1 = document.getElementById("myModal");
-        console.log("AA")
+        console.log("AA",val)
         modal1.style.display = "block";
     }
     const closeModal1 = () => {
@@ -46,9 +54,6 @@ function Dashboard() {
         var modal1 = document.getElementById("myModal");
         console.log("BB")
         modal1.style.display = "none";
-    }
-    const editExpense = () => {
-        closeModal2()
     }
     const openModal2 = () => {
      
@@ -62,6 +67,13 @@ function Dashboard() {
         var modal2 = document.getElementById("myModal2");
         console.log("DD")
         modal2.style.display = "none";
+    }
+
+    const deleteExpense = () => {
+        closeModal1()
+    }
+    const editExpense = () => {
+        closeModal2()
     }
     const addExpense = (event) => {
         event.preventDefault();
@@ -96,9 +108,9 @@ function Dashboard() {
                                             required
                                             type="text"
                                             placeholder='Enter your expense title'
-                                            value={inputs.title || ''}
+                                            value={inputs1.title || ''}
                                             onChange={handleChange}
-                                            name='title'
+                                            name='title1'
 
                                         />
                                     </div>
@@ -110,9 +122,9 @@ function Dashboard() {
                                             required
                                             type="number"
                                             placeholder='Enter your expense amount'
-                                            value={inputs.expense || ''}
+                                            value={inputs1.expense1 || ''}
                                             onChange={handleChange}
-                                            name='expense'
+                                            name='expense1'
 
                                         />
                                     </div>
@@ -121,9 +133,9 @@ function Dashboard() {
                                             Type
                                         </label>
                                         <select
-                                            value={inputs.type || ''}
+                                            value={inputs1.type1 || ''}
                                             onChange={handleChange}
-                                            name='type'
+                                            name='type1'
                                             required
 
                                         >
@@ -142,9 +154,9 @@ function Dashboard() {
                                             required
                                             type="date"
                                             placeholder='Enter Date'
-                                            value={inputs.date || ''}
+                                            value={inputs1.date1 || ''}
                                             onChange={handleChange}
-                                            name='date'
+                                            name='date1'
 
                                         />
                                     </div>
@@ -166,7 +178,7 @@ function Dashboard() {
                             <div className='expenseCard' key={key}>
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', justifyItems: 'center', alignContent: 'center', alignItems: 'center' }}>
                                     <img onClick={openModal2} style={{ width: '30px', height: '30px' }} src={edit} />
-                                    <img onClick={openModal1} style={{ width: '20px', height: '20px', marginLeft: '4px' }} src={del} />
+                                    <img onClick={()=>{openModal1(val)}} style={{ width: '20px', height: '20px', marginLeft: '4px' }} src={del} />
                                 </div>
                                 <p>Title</p>
                                 <p>Amount {val}</p>

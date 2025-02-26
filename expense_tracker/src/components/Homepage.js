@@ -9,10 +9,7 @@ function Homepage() {
     const [inputs1, setInputs1] = useState({})
     const [inputs2, setInputs2] = useState({})
     const [showerror, setShowError] = useState(false)
-
-
-
-
+    const [error, setError] = useState("")
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -67,32 +64,39 @@ function Homepage() {
             password: inputs.pass
         }
         var params = JSON.stringify(paramsjson);
-        await fetch(api.baseurl + "auth/login",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: params
+        try {
+            const res = await fetch(api.baseurl + "auth/login",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: params
 
-            }
-        ).then((res) => {
-            (res.json()).then((data) => {
-                if(data.success == true){
-                    localStorage.setItem("name",data.name);
-                    localStorage.setItem("email",data.email);
-                    localStorage.setItem("token",data.token);
-                    localStorage.setItem("islogin",true);
-                    navigate('/dashboard');
                 }
-                else{
-                    setShowError(true);
-                }
-            }
             )
+            const data = await res.json()
 
-        })
 
+            if (data.success == true) {
+                localStorage.setItem("name", data.name);
+                localStorage.setItem("email", data.email);
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("islogin", true);
+                navigate('/dashboard');
+            }
+            else {
+                setShowError(true);
+                setError("Invalid Credentials")
+            }
+
+
+        }
+        catch (error) {
+            console.log("Error ", error);
+            setShowError(true);
+            setError("Failed to connect with server");
+        }
     }
     const updatePass = (event) => {
         event.preventDefault();
@@ -231,7 +235,7 @@ function Homepage() {
                         {
                             showerror ?
                                 <div>
-                                    <span style={{ color: 'red', alignSelf: 'center' }}>Invalid Credentials</span>
+                                    <span style={{ color: 'red', alignSelf: 'center' }}>{error}</span>
                                 </div> : null
                         }
 
